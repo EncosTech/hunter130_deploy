@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<robot name="encos130" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="hunter130" xmlns:xacro="http://www.ros.org/wiki/xacro">
 
   <!-- ==================== Pelvis (Base) ==================== -->
   <link name="pelvis">
@@ -739,5 +739,5 @@
 
   <!-- ==================== ros2_control ==================== -->
   <xacro:include filename="$(find ec_description)/urdf/ros2_control.xacro"/>
-  <xacro:encos130_ros2_control name="encos130" prefix=""/>
+  <xacro:hunter130_ros2_control name="hunter130" prefix=""/>
 </robot>

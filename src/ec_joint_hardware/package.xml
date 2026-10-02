@@ -3,18 +3,11 @@
 <package format="3">
   <name>ec_joint_hardware</name>
   <version>1.0.0</version>
-  <description>ros2_control hardware plugin for EC130 joint motors.</description>
+  <description>ros2_control hardware plugin for hunter130 joint motors.</description>
   <maintainer email="contact@encos.com">milkyway</maintainer>
   <license>GPL-3.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-
-  <build_depend>hardware_interface</build_depend>
-  <build_depend>joint_sdk</build_depend>
-  <build_depend>nlohmann-json-dev</build_depend>
-  <build_depend>pluginlib</build_depend>
-  <build_depend>rclcpp</build_depend>
-  <build_depend>rclcpp_lifecycle</build_depend>
 
   <depend>hardware_interface</depend>
   <depend>joint_sdk</depend>

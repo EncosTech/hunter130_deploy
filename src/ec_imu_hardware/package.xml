@@ -3,18 +3,13 @@
 <package format="3">
   <name>ec_imu_hardware</name>
   <version>1.0.0</version>
-  <description>ros2_control hardware plugin for EC130 IMU sensor.</description>
+  <description>ros2_control hardware plugin for hunter130 IMU sensor.</description>
   <maintainer email="contact@encos.com">milkyway</maintainer>
   <license>GPL-3.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <build_depend>eigen</build_depend>
-  <build_depend>encos_driver</build_depend>
-  <build_depend>hardware_interface</build_depend>
-  <build_depend>pluginlib</build_depend>
-  <build_depend>rclcpp</build_depend>
-  <build_depend>rclcpp_lifecycle</build_depend>
 
   <depend>encos_driver</depend>
   <depend>hardware_interface</depend>

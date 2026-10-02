@@ -1,21 +1,21 @@
-# EC130 Deploy
+# hunter130 Deploy
 
-EC130 人形机器人 ROS2 Jazzy 部署包。
+hunter130 人形机器人 ROS2 Jazzy 部署包。
 
 ## 概述
 
-本项目为 EC130 人形机器人提供完整的 ROS2 控制系统，包括：
+本项目为 hunter130 人形机器人提供完整的 ROS2 控制系统，包括：
 
 - 关节电机和 IMU 传感器的硬件抽象层
 - 遥控器通信（IBUS 协议）
-- 三种控制模式：自由、站立、强化学习行走
+- 三种控制模式：阻尼、站立、强化学习行走
 - 基于 ONNX Runtime 的策略推理
 
 ## 软件包
 
 | 软件包 | 说明 |
 |--------|------|
-| [ec_description](src/ec_description/) | EC130 机器人 URDF 模型和网格文件 |
+| [ec_description](src/ec_description/) | hunter130 机器人 URDF 模型和网格文件 |
 | [ec_joint_hardware](src/ec_joint_hardware/) | 关节电机 ros2_control 硬件插件 |
 | [ec_imu_hardware](src/ec_imu_hardware/) | IMU 传感器 ros2_control 硬件插件 |
 | [ec_radio](src/ec_radio/) | 遥控器通信桥接节点（IBUS 协议） |
@@ -28,25 +28,105 @@ EC130 人形机器人 ROS2 Jazzy 部署包。
 
 ## 安装
 
+先在 Ubuntu 24.04 上使用 [FishROS 一键安装工具](https://fishros.com/page/)
+安装完整的 ROS2 Jazzy 桌面版。以下命令在 Bash 终端中执行：
+
 ```bash
-# 安装依赖
-sudo apt install -y \
-  libyaml-cpp-dev \
-  ros-jazzy-ros2-control \
-  ros-jazzy-ros2-controllers \
-  ros-jazzy-serial-driver \
-  ros-jazzy-realtime-tools \
-  ros-jazzy-asio-cmake-module \
-  ros-jazzy-xacro
+source <(wget -qO- https://fishros.com/install)
+```
+
+按提示选择 ROS 安装、ROS2 Jazzy 和桌面版，完成安装后再安装本项目的其他依赖。
+
+```bash
+source /opt/ros/jazzy/setup.bash
+```
+
+安装构建工具，并克隆仓库：
+
+```bash
+sudo apt update
+sudo apt install -y build-essential cmake git python3-colcon-common-extensions wget
 
 # 克隆仓库
-git clone https://github.com/your-username/encos130_deploy.git
-cd encos130_deploy
+git clone https://github.com/EncosTech/hunter130_deploy.git
+cd hunter130_deploy
+```
 
-# 编译
+安装官方 DEB 包：[encos_driver v3.3.2](https://github.com/EncosTech/encos_driver/releases/tag/v3.3.2)
+和 [joint_sdk v1.4.5](https://github.com/EncosTech/joint_sdk/releases/tag/v1.4.5)。
+以下命令适用于 Ubuntu 24.04，自动选择 `amd64` 或 `arm64` 架构：
+
+```bash
+sdk_arch=$(dpkg --print-architecture)
+mkdir -p /tmp/hunter130-sdk
+wget -P /tmp/hunter130-sdk \
+  "https://github.com/EncosTech/encos_driver/releases/download/v3.3.2/libencosdriver_3.3.2_${sdk_arch}_noble.deb" \
+  "https://github.com/EncosTech/joint_sdk/releases/download/v1.4.5/jointsdk_1.4.5_${sdk_arch}_noble.deb"
+sudo apt install -y \
+  "/tmp/hunter130-sdk/libencosdriver_3.3.2_${sdk_arch}_noble.deb" \
+  "/tmp/hunter130-sdk/jointsdk_1.4.5_${sdk_arch}_noble.deb"
+sudo ldconfig
+```
+
+`apt` 会自动处理 SDK 的系统依赖。仅使用关节滑块工具时，还需从配套工作空间
+提供含 `FsmState.srv` 的 `robot_interfaces` 包；常规启动无需该包。
+
+安装本项目的系统、ROS 和测试依赖（已安装的包会自动跳过）：
+
+```bash
+sudo apt install -y \
+  libeigen3-dev \
+  liburdfdom-tools \
+  libyaml-cpp-dev \
+  nlohmann-json3-dev \
+  python3-tk \
+  ros-jazzy-ament-cmake \
+  ros-jazzy-ament-cmake-gtest \
+  ros-jazzy-ament-cmake-pytest \
+  ros-jazzy-ament-index-cpp \
+  ros-jazzy-ament-index-python \
+  ros-jazzy-ament-lint-auto \
+  ros-jazzy-ament-lint-common \
+  ros-jazzy-controller-interface \
+  ros-jazzy-controller-manager \
+  ros-jazzy-controller-manager-msgs \
+  ros-jazzy-geometry-msgs \
+  ros-jazzy-hardware-interface \
+  ros-jazzy-joint-state-broadcaster \
+  ros-jazzy-joint-state-publisher-gui \
+  ros-jazzy-launch \
+  ros-jazzy-launch-ros \
+  ros-jazzy-launch-testing-ament-cmake \
+  ros-jazzy-launch-testing-ros \
+  ros-jazzy-pluginlib \
+  ros-jazzy-rclcpp \
+  ros-jazzy-rclcpp-lifecycle \
+  ros-jazzy-rclpy \
+  ros-jazzy-rcpputils \
+  ros-jazzy-realtime-tools \
+  ros-jazzy-robot-state-publisher \
+  ros-jazzy-ros2launch \
+  ros-jazzy-rosidl-default-generators \
+  ros-jazzy-rosidl-default-runtime \
+  ros-jazzy-sensor-msgs \
+  ros-jazzy-serial-driver \
+  ros-jazzy-std-msgs \
+  ros-jazzy-tf2-ros \
+  ros-jazzy-urdf \
+  ros-jazzy-xacro
+```
+
+编译工作空间：
+
+```bash
 colcon build --symlink-install
 source install/setup.bash
 ```
+
+ONNX Runtime 1.28.1 的头文件和共享库已包含在
+`src/ec_controller/thirdparty/onnxruntime/`，无需另装 Python `onnxruntime`。
+内置共享库为 **amd64（x86_64）** 架构。ARM64 部署需替换为 ARM64 版
+ONNX Runtime 1.28.1；仅安装 ARM64 版 SDK 不足以完成部署。
 
 ## 使用方法
 
@@ -102,7 +182,7 @@ ros2 service call /controller_manager/switch_controller controller_manager_msgs/
 ## 项目结构
 
 ```
-encos130_deploy/
+hunter130_deploy/
 ├── src/
 │   ├── ec_description/          # URDF 模型
 │   │   ├── meshes/              # STL 网格文件

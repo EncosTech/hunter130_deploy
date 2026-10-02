@@ -3,15 +3,13 @@
 <package format="3">
   <name>ec_controller</name>
   <version>1.0.0</version>
-  <description>Controller plugins for EC130 humanoid robot. Includes default (free), stand, and walk (RL-based) controllers.</description>
+  <description>Controller plugins for hunter130 humanoid robot. Includes default (free), stand, and walk (RL-based) controllers.</description>
   <maintainer email="contact@encos.com">milkyway</maintainer>
   <license>GPL-3.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <build_depend>std_msgs</build_depend>
-  <build_depend>yaml-cpp</build_depend>
-
+  <depend>ament_index_cpp</depend>
   <depend>controller_interface</depend>
   <depend>controller_manager_msgs</depend>
   <depend>ec_radio</depend>
@@ -27,6 +25,8 @@
   <depend>tf2_ros</depend>
   <depend>yaml-cpp</depend>
 
+  <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>ec_description</exec_depend>
   <exec_depend>controller_manager</exec_depend>
   <exec_depend>joint_state_broadcaster</exec_depend>
   <exec_depend>joint_state_publisher_gui</exec_depend>

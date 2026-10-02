@@ -15,7 +15,7 @@ def generate_launch_description():
 
     model_path = os.path.join(get_package_share_directory('ec_description'))
 
-    xacro_file = os.path.join(model_path, 'urdf', 'encos130.xacro')
+    xacro_file = os.path.join(model_path, 'urdf', 'hunter130.xacro')
 
     ec_controller_path = os.path.join(get_package_share_directory('ec_controller'))
 

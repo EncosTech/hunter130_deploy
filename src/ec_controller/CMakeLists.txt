@@ -6,6 +6,7 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
 endif()
 
 set(CONTROLLER_INCLUDE_DEPENDS
+    ament_index_cpp
     pluginlib
     controller_interface
     rclcpp

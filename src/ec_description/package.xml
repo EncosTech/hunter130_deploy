@@ -3,14 +3,19 @@
 <package format="3">
   <name>ec_description</name>
   <version>1.0.0</version>
-  <description>URDF and mesh files for EC130 humanoid robot.</description>
+  <description>URDF and mesh files for hunter130 humanoid robot.</description>
   <maintainer email="contact@encos.com">milkyway</maintainer>
   <license>GPL-3.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
+  <exec_depend>ec_joint_hardware</exec_depend>
+  <exec_depend>ec_imu_hardware</exec_depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>xacro</exec_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
 
   <export>
     <build_type>ament_cmake</build_type>
